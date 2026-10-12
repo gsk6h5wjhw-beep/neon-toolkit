@@ -3,7 +3,8 @@ name: Build STANDOFF TOOL APK
 on:
 workflow_dispatch:
 push:
-branches: [main]
+branches:
+- main
 
 permissions:
 contents: read
@@ -27,7 +28,7 @@ steps:
   - name: Install Android SDK
     uses: android-actions/setup-android@v3
   - name: Install SDK packages
-    run: sdkmanager "platforms;android-35" "build-tools;34.0.0"
+    run: sdkmanager "platforms;android-35" "build-tools;35.0.0"
   - name: Generate Android project
     shell: bash
     run: |
@@ -81,8 +82,7 @@ steps:
           <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
           <application
               android:theme="@android:style/Theme.Material.NoActionBar"
-              android:label="STANDOFF TOOL"
-              android:usesCleartextTraffic="false">
+              android:label="STANDOFF TOOL">
               <activity
                   android:name=".MainActivity"
                   android:exported="true">
@@ -181,7 +181,7 @@ steps:
                   });
                   addButton("Предпросмотр",()->{
                       new AlertDialog.Builder(this).setTitle("Прицел: "+shape)
-                        .setMessage("Размер: "+size+" px\\nЦвет меняется кнопкой цвета.")
+                        .setMessage("Размер: "+size+" px\nЦвет меняется кнопкой цвета.")
                         .setPositiveButton("OK",null).show();
                   });
                   addButton("Запустить плавающий прицел",()->{
@@ -198,9 +198,7 @@ steps:
                           Toast.makeText(this,"Прицел запущен",0).show();
                       }
                   });
-                  addButton("Отключить прицел",()->{
-                      stopService(new Intent(this,CrosshairService.class));
-                  });
+                  addButton("Отключить прицел",()->stopService(new Intent(this,CrosshairService.class)));
               } else if(tab.equals("Presets")) {
                   EditText name=new EditText(this); name.setHint("Название пресета");
                   content.addView(name);
