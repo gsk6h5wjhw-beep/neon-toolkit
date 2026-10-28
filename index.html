@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Алексей — Ночь 1</title>
+<style>
+:root{
+  --site-primary:#d8e7ff;
+  --site-secondary:#273449;
+  --site-background:#070a10;
+  --site-on-primary:#07101d;
+  --site-on-secondary:#f4f7fb;
+  --site-on-background:#f4f7fb;
+  --site-font-body:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  --site-font-heading:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  --site-heading-scale:1;
+  --site-spacing-scale:1;
+  --site-radius-scale:1;
+  --site-decoration-opacity:1;
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;background:#070a10;color:var(--site-on-background);font-family:var(--site-font-body)}
+body{overflow-x:hidden}
+#app{
+  min-height:100vh;
+  background:var(--site-background);
+  display:flex;
+  justify-content:center;
+}
+.stage{
+  width:min(100%,520px);
+  min-height:100vh;
+  position:relative;
+  overflow:hidden;
+  background:
+    radial-gradient(circle at 80% 15%,rgba(70,95,130,.16),transparent 30%),
+    linear-gradient(180deg,#0c1119 0%,#070a10 65%,#040609 100%);
+}
+.scene{
+  position:absolute;inset:0;
+  opacity:0;transform:scale(1.03);
+  transition:opacity .7s,transform .9s;
+}
+.scene.active{opacity:1;transform:scale(1)}
+.sky{position:absolute;inset:0 0 38%;background:linear-gradient(#0a0f18,#101b29 55%,#1b2735)}
+.cloud{position:absolute;width:55%;height:15%;border-radius:50%;background:#182433;filter:blur(12px);opacity:.45}
+.cloud.a{top:15%;left:-10%}.cloud.b{top:25%;right:-15%;width:65%}
+.street{position:absolute;left:-10%;right:-10%;bottom:-5%;height:47%;background:#151a20;clip-path:polygon(32% 0,68% 0,100% 100%,0 100%)}
+.side{position:absolute;bottom:0;width:28%;height:45%;background:#11151b}
+.side.l{left:0;clip-path:polygon(0 8%,100% 0,100% 100%,0 100%)}.side.r{right:0;clip-path:polygon(0 0,100% 8%,100% 100%,0 100%)}
+.building{position:absolute;bottom:38%;width:25%;height:34%;background:#151c26;border:1px solid #263241}
+.building.l{left:3%}.building.r{right:3%;height:40%}
+.win{position:absolute;width:8px;height:13px;background:#667b8e;box-shadow:0 0 13px #66819a}
+.b1{left:9%;bottom:57%}.b2{left:17%;bottom:62%}.b3{right:12%;bottom:58%}.b4{right:19%;bottom:66%}
+.lamp{position:absolute;right:20%;bottom:39%;width:2px;height:34%;background:#252d37}
+.lamp:after{content:"";position:absolute;top:-7px;left:-9px;width:20px;height:20px;border-radius:50%;background:#d8c98b;box-shadow:0 0 30px 12px rgba(216,201,139,.18)}
+.hero{
+  position:absolute;left:50%;bottom:23%;width:58px;height:115px;
+  transform:translateX(-50%);
+}
+.head{position:absolute;top:0;left:16px;width:27px;height:29px;border-radius:50%;background:#b77d61}
+.body{position:absolute;top:27px;left:9px;width:41px;height:55px;border-radius:12px 12px 5px 5px;background:#202b3b}
+.leg{position:absolute;top:77px;width:15px;height:40px;background:#11161e;border-radius:5px}.leg.l{left:10px}.leg.r{right:10px}
+.arm{position:absolute;top:33px;width:10px;height:43px;background:#b77d61;border-radius:8px}.arm.l{left:3px;transform:rotate(8deg)}.arm.r{right:3px;transform:rotate(-8deg)}
+.backpack{position:absolute;top:35px;left:4px;width:9px;height:40px;background:#39485b;border-radius:6px}
+.door{position:absolute;left:50%;bottom:30%;transform:translateX(-50%);width:115px;height:210px;background:#242a31;border:3px solid #10141a}
+.door:before{content:"";position:absolute;left:11px;top:11px;right:11px;bottom:11px;border:1px solid #39424d}
+.handle{position:absolute;right:14px;top:55%;width:8px;height:8px;border-radius:50%;background:#c0a56c}
+.stick{position:absolute;left:24%;bottom:28%;width:70px;height:8px;border-radius:5px;background:#71523a;transform:rotate(-18deg);box-shadow:0 3px 6px #000}
+.flashlight{position:absolute;right:18%;bottom:43%;width:34px;height:12px;border-radius:8px;background:#303d4d;transform:rotate(-20deg)}
+.beam{position:absolute;right:12%;bottom:44%;width:170px;height:115px;clip-path:polygon(100% 48%,0 0,0 100%);background:linear-gradient(90deg,rgba(235,245,255,.14),transparent)}
+.silhouette{position:absolute;right:14%;bottom:38%;width:34px;height:85px;opacity:.8}
+.silhouette:before{content:"";position:absolute;top:0;left:7px;width:22px;height:22px;border-radius:50%;background:#080b0f}
+.silhouette:after{content:"";position:absolute;top:18px;left:2px;width:32px;height:62px;border-radius:14px;background:#080b0f}
+.ui{
+  position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;
+  padding:22px 18px 24px;z-index:10;
+  background:linear-gradient(transparent 45%,rgba(0,0,0,.72) 72%,rgba(0,0,0,.9));
+}
+.badge{align-self:flex-start;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:#9aa8b8;margin-bottom:8px}
+.text{font-size:18px;line-height:1.45;font-weight:600;min-height:78px;text-shadow:0 2px 10px #000}
+.choices{display:grid;gap:10px;margin-top:10px}
+button{
+  border:1px solid rgba(216,231,255,.2);background:rgba(25,34,47,.9);color:#fff;
+  padding:14px 15px;border-radius:14px;font:600 15px var(--site-font-body);
+  text-align:left;cursor:pointer;transition:.18s;
+}
+button:hover{background:#33445b;transform:translateY(-1px)}
+button:active{transform:scale(.98)}
+.small{font-size:12px;color:#8492a2;text-align:center;margin-top:9px}
+.fade{animation:fade .55s ease both}@keyframes fade{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
+.flash{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none;z-index:20}
+.flash.go{animation:flash .45s}@keyframes flash{0%{opacity:0}20%{opacity:.85}100%{opacity:0}}
+.death .hero{opacity:.35;filter:grayscale(1)}
+.death .scene{filter:saturate(.6)}
+.ending{justify-content:center;text-align:center;background:rgba(3,5,8,.82)}
+.ending .text{font-size:30px;min-height:auto;margin-bottom:15px}
+</style>
+</head>
+<body>
+<div id="app"><main class="stage">
+  <div class="scene active" id="scene">
+    <div class="sky"></div><div class="cloud a"></div><div class="cloud b"></div>
+    <div class="building l"></div><div class="building r"></div>
+    <i class="win b1"></i><i class="win b2"></i><i class="win b3"></i><i class="win b4"></i>
+    <div class="side l"></div><div class="side r"></div><div class="street"></div><div class="lamp"></div>
+    <div class="door"><i class="handle"></i></div>
+    <div class="stick"></div><div class="flashlight"></div><div class="beam"></div><div class="silhouette"></div>
+    <div class="hero"><i class="head"></i><i class="body"></i><i class="leg l"></i><i class="leg r"></i><i class="arm l"></i><i class="arm r"></i><i class="backpack"></i></div>
+  </div>
+  <div class="flash" id="flash"></div>
+  <section class="ui" id="ui"></section>
+</main></div>
+<script>
+const ui=document.getElementById('ui'), flash=document.getElementById('flash'), scene=document.getElementById('scene');
+let step=0, inventory={stick:false};
+const story=[
+ {tag:"НОЧЬ 1 · 03:17",text:"Электричество отключилось десять минут назад. Алексей идёт домой через пустой двор. Где-то далеко раздаётся сирена.",choices:[
+  ["Поднять палку у дороги","stick"],
+  ["Не останавливаться","noStick"]
+ ]},
+ {tag:"03:21",text:"У подъезда Алексей замечает дверь, которая медленно приоткрылась сама. Внутри темно. Сверху слышится металлический шум.",choices:[
+  ["Зайти внутрь","inside"],
+  ["Обойти дом через двор","yard"]
+ ]},
+ {tag:"03:24",text:"На лестнице появляется силуэт. Он стоит неподвижно. Алексей вспоминает сообщение по радио: «Не шумите. Они реагируют на звук».",choices:[
+  ["Тихо подняться наверх","stairs"],
+  ["Бросить предмет в сторону и отвлечь его","throw"]
+ ]}
+];
+function render(tag,text,choices){
+ ui.className="ui";
+ ui.innerHTML=`<div class="badge fade">${tag}</div><div class="text fade">${text}</div><div class="choices fade">${
+ choices.map((c,i)=>`<button data-i="${i}">${c[0]}</button>`).join("")
+ }</div><div class="small">Выбор зрителей определяет следующую ветку</div>`;
+ ui.querySelectorAll("button").forEach(b=>b.onclick=()=>choose(choices[+b.dataset.i][1]));
+}
+function choose(id){
+ flash.classList.remove("go");void flash.offsetWidth;flash.classList.add("go");
+ setTimeout(()=>branch(id),220);
+}
+function branch(id){
+ if(id==="stick"){inventory.stick=true;step=1;render("03:19","Палка может пригодиться. Алексей идёт дальше. Вдруг за спиной раздаётся быстрый скрежет по асфальту.","")}
+ else if(id==="noStick"){death("Алексей продолжает идти с пустыми руками. Из темноты выскакивает заражённый. Он не успевает закрыть дверь подъезда.");return}
+ else if(id==="inside"){step=2;render("03:24","Алексей заходит внутрь. На лестнице темно. Где-то наверху что-то медленно волочится по полу.",[["Подняться тихо","stairs"],["Бежать наверх","run"]]);return}
+ else if(id==="yard"){death("Он обходит дом. В темноте срабатывает датчик движения. Сирена оживает — и из соседних подъездов начинают выходить заражённые.");return}
+ else if(id==="stairs"){win("Алексей задерживает дыхание и медленно поднимается. Палка остаётся в руке, но он не издаёт ни звука. Силуэт проходит мимо.");return}
+ else if(id==="throw"){death("Предмет с грохотом ударяется о стену. Силуэт мгновенно разворачивается. Звук оказался слишком громким.");return}
+ else if(id==="run"){death("Алексей бросается вверх по лестнице. Шаги разносятся по всему подъезду.");return}
+}
+function death(text){
+ document.body.classList.add("death");
+ ui.className="ui ending";
+ ui.innerHTML=`<div class="badge">ВЕТКА ЗАВЕРШЕНА</div><div class="text fade">☠ Алексей не выжил.<br><br><span style="font-size:16px;font-weight:500">${text}</span></div><div class="choices"><button onclick="location.reload()">Начать заново</button></div>`;
+}
+function win(text){
+ ui.className="ui ending";
+ ui.innerHTML=`<div class="badge">ПРОДОЛЖЕНИЕ</div><div class="text fade">✓ АЛЕКСЕЙ ВЫЖИЛ — ПОКА ЧТО.<br><br><span style="font-size:16px;font-weight:500">${text}</span></div><div class="choices"><button onclick="nextChapter()">Следующая сцена</button></div>`;
+}
+function nextChapter(){
+ render("03:29 · ГЛАВА 2","На четвёртом этаже Алексей находит квартиру с приоткрытой дверью. Изнутри слышится тихий голос: «Если ты человек — заходи». Что делать?",[
+  ["Войти","inside2"],["Не доверять и уйти","leave2"]
+ ]);
+}
+function chapter2(id){
+ if(id==="inside2") win("Внутри находится работающая рация и карта безопасного маршрута. Но голос по рации вдруг говорит: «Не верь человеку в квартире».");
+ else death("Алексей уходит. На лестнице загорается аварийный свет. Он замечает слишком поздно, что путь назад уже перекрыт.");
+}
+ui.addEventListener("click",e=>{});
+render(story[0].tag,story[0].text,story[0].choices);
+const oldBranch=branch;
+branch=function(id){
+ if(id==="inside2"||id==="leave2"){chapter2(id);return}
+ oldBranch(id);
+}
+</script>
+</body>
+</html>
